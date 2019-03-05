@@ -8,25 +8,25 @@ os.chdir(experiment_dir) #tells the os to go to the directory every time
 '''....................Stimtracker...........................................'''
 # This sets the Cedrus StimTracker box in order to send the triggers
 
-class NullStimtracker(object):
-    def activate_line(self, bitmask=None):
-        pass
-
-# Looks for stimtracker hardware, if not found: sends a warning
-def get_stimtracker(trigger_duration=5):
-    for dev in pyxid.get_xid_devices():
-        if dev.is_stimtracker():
-            dev.set_pulse_duration(trigger_duration)
-            return dev
-    print "STIMTRACKER NOT FOUND!"
-    decision=raw_input('Continue anyway? [y/n]: ')
-    if decision=='y':
-        return NullStimtracker()
-    else:
-        core.quit() #you'll have to hit enter after this and then it will prompt the above question
-
-triggerBox = get_stimtracker() #run the function above, saving stimtracker as triggerBox
-
+# class NullStimtracker(object):
+#     def activate_line(self, bitmask=None):
+#         pass
+#
+# # Looks for stimtracker hardware, if not found: sends a warning
+# def get_stimtracker(trigger_duration=5):
+#     for dev in pyxid.get_xid_devices():
+#         if dev.is_stimtracker():
+#             dev.set_pulse_duration(trigger_duration)
+#             return dev
+#     print "STIMTRACKER NOT FOUND!"
+#     decision=raw_input('Continue anyway? [y/n]: ')
+#     if decision=='y':
+#         return NullStimtracker()
+#     else:
+#         core.quit() #you'll have to hit enter after this and then it will prompt the above question
+#
+# triggerBox = get_stimtracker() #run the function above, saving stimtracker as triggerBox
+#
 
 
 '''.................... Experiment and Participant info ......................'''
@@ -46,7 +46,7 @@ expInfo['Run']=raw_input('Prac-Expt: ')
 #rtClock creates an object that will be used to record the time of a given response, object is the time, the object then gets inserted into the class so every time it's used, it records the time
 
 win = visual.Window(monitor="testMonitor", units="pix", fullscr=True, colorSpace='rgb255', color=[127,127,127])
-word = visual.TextStim(win,text='', font='Courier New', wrapWidth=500, alignHoriz='center', height=40, color=(-1,-1,-1))
+word = visual.TextStim(win,text='', font='Courier New', wrapWidth=900, alignHoriz='center', height=40, color=(-1,-1,-1))
 fixation = visual.TextStim(win, text='+', height=40, color=(-1,-1,-1))
 instructions = visual.TextStim(win,text='', font='Courier New', wrapWidth=800, alignHoriz='center', height=30, color=(-1,-1,-1))
 photodiode = visual.Rect(win, width=90, height=90, pos=[510,360], fillColor=[255,255,255], fillColorSpace='rgb255')
@@ -71,7 +71,7 @@ def present_fix():
         if frame <= 18:
             fixation.draw()
         win.flip()
-
+        # return event.waitKeys(keyList=['1'])
 
 # Presents a word that stays on screen until response
 def present_word(text='', trigger=None, photoDiode=True):
@@ -105,20 +105,43 @@ def make_blocks(stim, n):
 ##---------------------------Practice-------------------------------------##
 if expInfo['Run'] == 'Prac':
 
-    with open('mri_stimuli.csv') as f:
+    with open('mri_practice.csv') as f:
         trials_practice = [i for i in csv.DictReader(f)]
 
     present_instructions('You will start the practice now.')
 
     for trial in trials_practice:
+        present_instructions('Please wait while we set up the next trial.')
         present_fix()
-        resp = present_word(text=trial['target']) #present target
+        text = '%s %s %s %s' %(trial['w1'],trial['w2'],trial['w3'],trial['w4'])
+        resp = present_word(text=text, photoDiode=False) #present target
         win.flip()
         if resp[0][0] == 'q':
             win.close()
             core.quit()
 
     present_instructions('The practice is over.')
+
+##---------------------------Experiment-------------------------------------##
+
+if expInfo['Run'] == 'Prac':
+
+    with open('mri_stimuli.csv') as f:
+        trials_practice = [i for i in csv.DictReader(f)]
+
+    present_instructions('You will start the experiment now.')
+
+    for trial in trials_practice:
+        present_instructions('Please wait while we set up the next trial.')
+        present_fix()
+        text = '%s %s %s %s' %(trial['w1'],trial['w2'],trial['w3'],trial['w4'])
+        resp = present_word(text=text, photoDiode=False) #present target
+        win.flip()
+        if resp[0][0] == 'q':
+            win.close()
+            core.quit()
+
+    present_instructions('The experiment is over. Please lie still while come to take you out of the MRI.')
 
 
 
