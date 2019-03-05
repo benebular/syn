@@ -63,7 +63,7 @@ def present_instructions(text=''):
     instructions.setText(text)
     instructions.draw()
     win.flip()
-    return event.waitKeys(keyList=['1', 'q']) #This waits for "1" to continue, edit if need other buttons
+    return event.waitKeys(keyList=['1']) #This waits for "1" to continue, edit if need other buttons
 
 
 def present_fix():
@@ -114,7 +114,7 @@ if expInfo['Run'] == 'Prac':
         present_fix()
         text = '%s %s %s %s' %(trial['w1'],trial['w2'],trial['w3'],trial['w4'])
         resp = present_word(text=text, photoDiode=False) #present target
-        present_instructions('Great job! Please wait while we set up the next trial.')
+        present_instructions('Great job! Please wait while we set up the next sentence.')
         win.flip()
         if resp[0][0] == 'q':
             win.close()
@@ -135,7 +135,7 @@ if expInfo['Run'] == 'Prac':
         present_fix()
         text = '%s %s %s %s' %(trial['w1'],trial['w2'],trial['w3'],trial['w4'])
         resp = present_word(text=text, photoDiode=False) #present target
-        present_instructions('Great job! Please wait while we set up the next trial.')
+        present_instructions('Great job! Please wait while we set up the next sentence.')
         win.flip()
         if resp[0][0] == 'q':
             win.close()
