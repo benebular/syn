@@ -105,7 +105,7 @@ def make_blocks(stim, n):
 ##---------------------------Practice-------------------------------------##
 if expInfo['Run'] == 'Prac':
 
-    with open('lexdec_practice.csv') as f:
+    with open('mri_stimuli.csv') as f:
         trials_practice = [i for i in csv.DictReader(f)]
 
     present_instructions('You will start the practice now.')
@@ -132,7 +132,7 @@ if expInfo['Run'] == 'Prac':
 elif expInfo['Run'] == 'Expt':
 
     #Importing stimuli
-    with open('lexdec_stim.csv') as f:
+    with open('mri_stimuli.csv') as f:
         trials = [i for i in csv.DictReader(f)]
 
     exp = data.ExperimentHandler(dataFileName='%s_logfile' %expInfo['Participant'], autoLog=False, savePickle=False)
