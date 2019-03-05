@@ -63,7 +63,7 @@ def present_instructions(text=''):
     instructions.setText(text)
     instructions.draw()
     win.flip()
-    return event.waitKeys(keyList=['1']) #This waits for "1" to continue, edit if need other buttons
+    return event.waitKeys(keyList=['9','q']) #This waits for "1" to continue, edit if need other buttons
 
 
 def present_fix():
@@ -114,17 +114,20 @@ if expInfo['Run'] == 'Prac':
         present_fix()
         text = '%s %s %s %s' %(trial['w1'],trial['w2'],trial['w3'],trial['w4'])
         resp = present_word(text=text, photoDiode=False) #present target
-        present_instructions('Great job! Please wait while we set up the next sentence.')
-        win.flip()
         if resp[0][0] == 'q':
             win.close()
             core.quit()
+        resp2 = present_instructions('Great job! Please wait while we set up the next sentence.')
+        if resp2[0][0]=='q':
+            win.close()
+            core.quit()
+        win.flip()
 
     present_instructions('The practice is over.')
 
 ##---------------------------Experiment-------------------------------------##
 
-if expInfo['Run'] == 'Prac':
+elif expInfo['Run'] == 'Expt':
 
     with open('mri_stimuli.csv') as f:
         trials_practice = [i for i in csv.DictReader(f)]
@@ -152,52 +155,51 @@ if expInfo['Run'] == 'Prac':
 
 
 ##-------------------------Experiment------------------------------------##
-elif expInfo['Run'] == 'Expt':
-
-    #Importing stimuli
-    with open('mri_stimuli.csv') as f:
-        trials = [i for i in csv.DictReader(f)]
-
-    exp = data.ExperimentHandler(dataFileName='%s_logfile' %expInfo['Participant'], autoLog=False, savePickle=False)
-
-    present_instructions('Lexical decision task: index (2) for words, middle finger (1) for non words.')
-
-    #randomize and block the trials
-    random.shuffle(trials)
-    blocks = make_blocks(trials,4) #4 blocks in this case
-    trialnum = 0
-    blocknum = 0
-    for block in blocks:
-        if blocknum > 0:
-            prompt = 'You have completed block #'+str(blocknum)+". Take a break, then press 1 when you are ready to continue."
-            present_instructions(prompt)
-
-        for trial in block:
-            present_fix()
-            resp = present_word(text=trial['target'])
-            win.flip()
-            if resp[0][0] == 'q':
-                win.close()
-                core.quit()
-            core.wait(random.gauss(1.0,0.167)) #isi
-            trialnum += 1
-
-            exp.addData('participant', expInfo['Participant'])
-            exp.addData('trialnum', trialnum)
-            exp.addData('target', trial['target'])
-            exp.addData('target_type', trial['target_type'])
-            exp.addData('trigger', trial['trigger'])
-            exp.addData('response', resp[0][0])
-            exp.addData('RT', resp[0][1])
-            if resp[0][0] == trial['correct_ans']:
-                exp.addData('hit', 1)
-            else:
-                exp.addData('hit', 0)
-            exp.nextEntry()
-
-        blocknum += 1
-
-    present_instructions('The experiment is over. Thank you.')
-
+# elif expInfo['Run'] == 'Expt':
+#     #Importing stimuli
+#     with open('mri_stimuli.csv') as f:
+#         trials = [i for i in csv.DictReader(f)]
+#
+#     exp = data.ExperimentHandler(dataFileName='%s_logfile' %expInfo['Participant'], autoLog=False, savePickle=False)
+#
+#     present_instructions('Lexical decision task: index (2) for words, middle finger (1) for non words.')
+#
+#     #randomize and block the trials
+#     random.shuffle(trials)
+#     blocks = make_blocks(trials,4) #4 blocks in this case
+#     trialnum = 0
+#     blocknum = 0
+#     for block in blocks:
+#         if blocknum > 0:
+#             prompt = 'You have completed block #'+str(blocknum)+". Take a break, then press 1 when you are ready to continue."
+#             present_instructions(prompt)
+#
+#         for trial in block:
+#             present_fix()
+#             resp = present_word(text=trial['target'])
+#             win.flip()
+#             if resp[0][0] == 'q':
+#                 win.close()
+#                 core.quit()
+#             core.wait(random.gauss(1.0,0.167)) #isi
+#             trialnum += 1
+#
+#             exp.addData('participant', expInfo['Participant'])
+#             exp.addData('trialnum', trialnum)
+#             exp.addData('target', trial['target'])
+#             exp.addData('target_type', trial['target_type'])
+#             exp.addData('trigger', trial['trigger'])
+#             exp.addData('response', resp[0][0])
+#             exp.addData('RT', resp[0][1])
+#             if resp[0][0] == trial['correct_ans']:
+#                 exp.addData('hit', 1)
+#             else:
+#                 exp.addData('hit', 0)
+#             exp.nextEntry()
+#
+#         blocknum += 1
+#
+#     present_instructions('The experiment is over. Thank you.')
+#
 win.close()
 core.quit()
