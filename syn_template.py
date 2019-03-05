@@ -63,7 +63,7 @@ def present_instructions(text=''):
     instructions.setText(text)
     instructions.draw()
     win.flip()
-    return event.waitKeys(keyList=['1']) #This waits for "1" to continue, edit if need other buttons
+    return event.waitKeys(keyList=['1', 'q']) #This waits for "1" to continue, edit if need other buttons
 
 
 def present_fix():
@@ -108,13 +108,13 @@ if expInfo['Run'] == 'Prac':
     with open('mri_practice.csv') as f:
         trials_practice = [i for i in csv.DictReader(f)]
 
-    present_instructions('You will start the practice now.')
+    present_instructions('You will start the practice now. Please read each sentence of four words aloud and speak at a casual pace.')
 
     for trial in trials_practice:
-        present_instructions('Please wait while we set up the next trial.')
         present_fix()
         text = '%s %s %s %s' %(trial['w1'],trial['w2'],trial['w3'],trial['w4'])
         resp = present_word(text=text, photoDiode=False) #present target
+        present_instructions('Great job! Please wait while we set up the next trial.')
         win.flip()
         if resp[0][0] == 'q':
             win.close()
@@ -129,19 +129,19 @@ if expInfo['Run'] == 'Prac':
     with open('mri_stimuli.csv') as f:
         trials_practice = [i for i in csv.DictReader(f)]
 
-    present_instructions('You will start the experiment now.')
+    present_instructions('You will start the experiment now. Please read each sentence of four words aloud and speak at a casual pace.')
 
     for trial in trials_practice:
-        present_instructions('Please wait while we set up the next trial.')
         present_fix()
         text = '%s %s %s %s' %(trial['w1'],trial['w2'],trial['w3'],trial['w4'])
         resp = present_word(text=text, photoDiode=False) #present target
+        present_instructions('Great job! Please wait while we set up the next trial.')
         win.flip()
         if resp[0][0] == 'q':
             win.close()
             core.quit()
 
-    present_instructions('The experiment is over. Please lie still while come to take you out of the MRI.')
+    present_instructions('The experiment is over. Please lie still for a moment while we come to take you out of the MRI.')
 
 
 
