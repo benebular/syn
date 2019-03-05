@@ -2,7 +2,7 @@
 from psychopy import visual, core, event, data
 import csv, random, pyxid, time, os
 
-experiment_dir = '/Users/benlang/Documents/syn/' #makes a variable that is the experiment directory
+experiment_dir = '/Users/benlang/Documents/GitHub/syn/' #makes a variable that is the experiment directory
 os.chdir(experiment_dir) #tells the os to go to the directory every time
 
 '''....................Stimtracker...........................................'''
