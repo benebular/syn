@@ -63,7 +63,7 @@ def present_instructions(text=''):
     instructions.setText(text)
     instructions.draw()
     win.flip()
-    return event.waitKeys(keyList=['9','q']) #This waits for "1" to continue, edit if need other buttons
+    return event.waitKeys(keyList=['9','q'], timeStamped=rtClock) #This waits for "1" to continue, edit if need other buttons
 
 
 def present_fix():
@@ -132,8 +132,11 @@ elif expInfo['Run'] == 'Expt':
     with open('mri_stimuli.csv') as f:
         trials_practice = [i for i in csv.DictReader(f)]
 
+    exp = data.ExperimentHandler(dataFileName='%s_logfile' %expInfo['Participant'], autoLog=False, savePickle=False)
+
     present_instructions('You will start the experiment now. Please read each sentence of four words aloud and speak at a casual pace.')
 
+    trialnum = 0
     for trial in trials_practice:
         present_fix()
         text = '%s %s %s %s' %(trial['w1'],trial['w2'],trial['w3'],trial['w4'])
@@ -143,6 +146,14 @@ elif expInfo['Run'] == 'Expt':
         if resp[0][0] == 'q':
             win.close()
             core.quit()
+
+        trialnum += 1
+
+        exp.addData('participant', expInfo['Participant'])
+        exp.addData('trialnum', trialnum)
+        exp.addData('text', text)
+        exp.addData('RT', resp[0][1])
+        exp.nextEntry()
 
     present_instructions('The experiment is over. Please lie still for a moment while we come to take you out of the MRI.')
 
@@ -189,16 +200,11 @@ elif expInfo['Run'] == 'Expt':
 #             exp.addData('target', trial['target'])
 #             exp.addData('target_type', trial['target_type'])
 #             exp.addData('trigger', trial['trigger'])
-#             exp.addData('response', resp[0][0])
 #             exp.addData('RT', resp[0][1])
-#             if resp[0][0] == trial['correct_ans']:
-#                 exp.addData('hit', 1)
-#             else:
-#                 exp.addData('hit', 0)
 #             exp.nextEntry()
 #
 #         blocknum += 1
-#
+# #
 #     present_instructions('The experiment is over. Thank you.')
 #
 win.close()
